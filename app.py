@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_restful import Api, Resource
 from pydantic import BaseModel
+from flask_pydantic import validate
 
 app = Flask(__name__)
 api = Api(app)
@@ -12,10 +13,11 @@ class ItemQueryParams(BaseModel):
 
 # Define a simple resource
 class ItemList(Resource):
-    def get(self):
-        params = ItemQueryParams(**request.args)
-        min_price = params.min_price
-        max_price = params.max_price
+    @validate()
+    def get(self, query: ItemQueryParams):
+        # params = ItemQueryParams(**request.args)
+        min_price = query.min_price
+        max_price = query.max_price
 
         items = [
             {'name': 'item1', 'price': 10.99},
