@@ -30,6 +30,6 @@ The `Representation` class in `utils.py` is a class that does not inherit from a
 
 `is_complex` is a method available in the `ModelField` class in `fields.py` (pydantic/v1/) where it checks for complex datatypes.
 
-The proposed solution is to modify the code in `convert_query_params` so that it does not attempt to check for complex data types as according to my little knowledge there will not be any complex data sent through query parameters.
+EDIT: pydantic implementation of params is changed. https://docs.pydantic.dev/latest/migration/#migration-guide
 
 for any further info kindly write raise an issue.
