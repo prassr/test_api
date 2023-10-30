@@ -33,6 +33,8 @@ class ItemList(Resource):
 
         return items
 
+
+
 # Add the resource to the API with a specific URL endpoint
 api.add_resource(ItemList, '/items')
 
