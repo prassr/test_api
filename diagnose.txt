@@ -53,5 +53,7 @@ The class `Representation` in utils.py (pydantic/v1) is bare class which does no
 
 `is_complex` is part of class `ModelField` in fields.py (pydantic/v1)
 
+The solution is to modify the code in 	` convert_query_params ` so that it does not check for complex data type. 
+
 https://docs.pydantic.dev/latest/migration/
 
