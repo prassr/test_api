@@ -35,4 +35,4 @@ pip install flask \
 ```
 http://localhost:5000?age=10
 ```
-This get request will produce an error and it can be seen in [here]("issue_attrubute_error_on_pydantic_query.png") 
+This get request will produce an error and it can be seen in ![here]("issue_attrubute_error_on_pydantic_query.png") 
