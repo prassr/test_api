@@ -1,0 +1,35 @@
+The code is encountering an error (AttributeError: 'FieldInfo' object has no attribute 'is_complex') when trying to use the `is_complex` method.
+
+Upon investigation, it was found that the issue arises when handling a query in a GET request within the `flask_pydantic/core.py` file.
+
+Inside the `validate` function, there's a decorator function `wrapper` that assigns `query_in_kwargs` to the `query_model` which is of type `<class '__main__.QueryModel'>`.
+
+When `query_model` is `not null`, the next step is to retrieve `query_params` using the `convert_query_params` function defined in `flask_pydantic/converters.py`.
+
+The `convert_query_params` function performs certain checks and returns a dictionary of query parameters.
+
+In the return statement, there's an unwrapping of a second dictionary created using an explicit for loop.
+
+In the for loop, the keys of `{key: value}` pairs are checked in Pydantic `model` fields using key in `model.__fields__`. Then, if it's true, it checks whether the key holds data of complex type with respect to the `model` using the statement `model.__fields__[key].is_complex()`.
+
+The `model.__fields__[key].is_complex()` check fails because `model.__fields__[key]` is of type `FieldInfo`.
+
+For example, when using a debugger (pdb), `querying query_model.__fields__["age"]` returns: `FieldInfo(annotation=int, required=True)`.
+
+The purpose of `object.is_complex()` is to check whether the field holds a complex data type defined and if it needs special handling.
+
+In this case, the code intended to handle complex fields may need to be wrapped in a try-catch block. The dictionary generated in the for loop can be put in another dictionary and later unwrapped or it should be removed based on details below.
+
+Further investigation revealed that `is_complex` is a custom method defined in Pydantic to check for complex data types. It's located in `pydantic/v1/fields.py`. This method is not available for `FieldInfo` class.
+
+It is observed that `FieldInfo` serves to provide additional information about the fields defined in a Pydantic model.
+
+In `fields.py`, the `FieldInfo` class does not have any method named `is_complex`. `FieldInfo` inherits from `Representation` in `pydantic/v1/utils.py`.
+
+The `Representation` class in `utils.py` is a class that does not inherit from any other class. It does not possess a method `is_complex`.
+
+`is_complex` is a method available in the `ModelField` class in `fields.py` (pydantic/v1/) where it checks for complex datatypes.
+
+The proposed solution is to modify the code in `convert_query_params` so that it does not attempt to check for complex data types as according to my little knowledge there will not be any complex data sent through query parameters.
+
+for any further info kindly write raise an issue.
